@@ -18,7 +18,8 @@
   "scripts": {
     "watch": "tsc -w",
     "build":"tsc",
-    "test": "mocha -r ts-node/register test/**.ts"
+    "test": "mocha -r ts-node/register test/**.ts",
+    "publish":"tsc && npm publish"
   },
   "dependencies": {
     "ramda": "^0.25.0"
