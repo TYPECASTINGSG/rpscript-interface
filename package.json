@@ -1,0 +1,35 @@
+{
+  "name": "rpscript-interface",
+  "version": "0.1.0",
+  "description": "RPScript interface for module implementation",
+  "keywords": [
+    "api",
+    "rpa",
+    "rpscript"
+  ],
+  "main":"build/index.js",
+  "types":"build/index.d.ts",
+  "license": "Apache-2.0",
+  "author": "James Chong",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wei3hua2/rpscript-interface.git"
+  },
+  "scripts": {
+    "watch": "tsc -w",
+    "build":"tsc",
+    "test": "mocha -r ts-node/register test/**.ts"
+  },
+  "dependencies": {
+    "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/node": "^10.3.5",
+    "@types/ramda": "^0.25.32",
+    "chai": "^4.1.2",
+    "mocha": "^5.2.0",
+    "ts-node": "^6.0.5",
+    "typescript": "^2.8.3"
+  }
+}
