@@ -1,4 +1,5 @@
 import {RpsContext} from './context';
-import {emitter,errorHandling} from './decorators';
+import {RpsModule,rpsAction} from './decorators';
+import {RpsModuleInt,ActionConfig} from './interface';
 
-export {RpsContext , emitter, errorHandling};
+export {RpsContext , RpsModuleInt, RpsModule, ActionConfig, rpsAction};
