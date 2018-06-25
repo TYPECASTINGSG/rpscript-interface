@@ -1,5 +1,5 @@
 import {RpsContext} from './context';
 import {RpsModule,rpsAction} from './decorators';
-import {RpsModuleInt,ActionConfig} from './interface';
+import {RpsModuleInt,ActionConfig,ActionDefaultParamPattern} from './interface';
 
-export {RpsContext , RpsModuleInt, RpsModule, ActionConfig, rpsAction};
+export {RpsContext , RpsModuleInt, RpsModule, ActionConfig, ActionDefaultParamPattern,rpsAction};
