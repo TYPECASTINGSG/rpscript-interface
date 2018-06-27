@@ -37,7 +37,7 @@ export function rpsAction (config?:ActionConfig) : Function{
         }
         
         let paramNames:string[] = getParamNames(originalMethod).slice(2);
-        let defObj = config.defaultParamPatterns;
+        let defObj = config.defaultParamPatterns || {};
         let l:Object = new Object;
 
         config.defaultParamPatterns = <ActionDefaultParamPattern>R.reduce((result,p)=>{
