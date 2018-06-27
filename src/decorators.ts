@@ -41,7 +41,7 @@ export function rpsAction (config?:ActionConfig) : Function{
         let l:Object = new Object;
 
         config.defaultParamPatterns = <ActionDefaultParamPattern>R.reduce((result,p)=>{
-            defObj[p] ?  result[p] = defObj[p].toString() : result[p] = /$^/.toString();
+            defObj[p] ?  result[p] = defObj[p].source : result[p] = /$^/.source;
             return result;
         }, l, paramNames);
 

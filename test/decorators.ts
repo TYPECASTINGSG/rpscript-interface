@@ -19,7 +19,7 @@ m.describe('Decorators', () => {
       if(availConfig) {
         expect(availConfig).to.deep.equals(
           { defaultName: 'call',
-            defaultParamPatterns: { title: "/.*/" ,message: "/$^/"},
+            defaultParamPatterns: { title: ".*" ,message: "$^"},
             actionName: 'calling' });
       }
     }
