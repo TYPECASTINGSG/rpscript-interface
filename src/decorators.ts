@@ -1,6 +1,8 @@
 import R from 'ramda';
 import { RpsContext } from './context';
-import {RpsModuleInt,ActionConfig} from './interface';
+import {RpsModuleInt,ActionConfig,ActionDefaultParamPattern} from './interface';
+
+var getParamNames = require('get-parameter-names');
 
 const ACTION_EVT_NAME = "action";
 
@@ -33,9 +35,19 @@ export function rpsAction (config?:ActionConfig) : Function{
                 return err;
             }
         }
+        
+        let paramNames:string[] = getParamNames(originalMethod).slice(2);
+        let defObj = config.defaultParamPatterns;
+        let l:Object = new Object;
+
+        config.defaultParamPatterns = <ActionDefaultParamPattern>R.reduce((result,p)=>{
+            defObj[p] ?  result[p] = defObj[p].toString() : result[p] = /$^/.toString();
+            return result;
+        }, l, paramNames);
 
         Object.defineProperty(descriptor.value,'rpsActionConfig',{value:config});
 
         return descriptor;
     }
+
 }

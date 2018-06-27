@@ -22,6 +22,7 @@
     "publish": "tsc && npm publish"
   },
   "dependencies": {
+    "get-parameter-names": "^0.3.0",
     "ramda": "^0.25.0"
   },
   "devDependencies": {
