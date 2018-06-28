@@ -16,7 +16,7 @@ export function RpsModule (modName:string) : Function {
 
 export function rpsAction (config?:ActionConfig) : Function{
     return function(target: Object, key: string, descriptor: TypedPropertyDescriptor<Function>) {
-
+        
         const originalMethod = descriptor.value;
         let rpsModule = <RpsModuleInt>target;
         config.actionName = originalMethod.name;
@@ -24,16 +24,50 @@ export function rpsAction (config?:ActionConfig) : Function{
         descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
             try{
                 ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'start', args);
-                
+            
                 const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
 
                 ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'end', result);
                 
                 return result;
+                
             }catch(err){
                 ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'error', err);
                 return err;
             }
+        }
+        
+        let paramNames:string[] = getParamNames(originalMethod).slice(2);
+        let defObj = config.defaultParamPatterns || {};
+        let l:Object = new Object;
+
+        config.defaultParamPatterns = <ActionDefaultParamPattern>R.reduce((result,p)=>{
+            defObj[p] ?  result[p] = defObj[p].source : result[p] = /$^/.source;
+            return result;
+        }, l, paramNames);
+
+        Object.defineProperty(descriptor.value,'rpsActionConfig',{value:config});
+
+        return descriptor;
+    }
+
+}
+
+export function rpsActionSkipErrHandling (config?:ActionConfig) : Function{
+    return function(target: Object, key: string, descriptor: TypedPropertyDescriptor<Function>) {
+        
+        const originalMethod = descriptor.value;
+        let rpsModule = <RpsModuleInt>target;
+        config.actionName = originalMethod.name;
+
+        descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
+            ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'start', args);
+        
+            const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
+
+            ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'end', result);
+            
+            return result;
         }
         
         let paramNames:string[] = getParamNames(originalMethod).slice(2);
