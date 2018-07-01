@@ -14,15 +14,59 @@ m.describe('Decorators', () => {
     
     let methods = Object.getOwnPropertyNames(CorrectClazz.prototype);
 
-    for(var i in methods){
-      let availConfig = CorrectClazz.prototype[methods[i]]['rpsActionConfig'];
-      if(availConfig) {
-        expect(availConfig).to.deep.equals(
-          { defaultName: 'call',
-            defaultParamPatterns: { title: ".*" ,message: "$^"},
-            actionName: 'calling' });
-      }
-    }
+    let actA = CorrectClazz.prototype['actA']['rpsActionConfig'];
+    expect(actA).to.deep.equals(
+      { defaultEnabled: false,
+        defaultPriority: 3,
+        actionName: 'actA',
+        params: 
+         [ { name: 'title', defaultPattern: '$^' },
+           { name: 'message', defaultPattern: '$^' } ] });
+
+    let actB = CorrectClazz.prototype['actB']['rpsActionConfig'];
+    expect(actB).to.deep.equals(
+      { defaultEnabled: true,
+        defaultPriority: 3,
+        defaultName: 'defActB',
+        actionName: 'actB',
+        params: 
+         [ { name: 'title', defaultPattern: '$^' },
+           { name: 'message', defaultPattern: '$^' } ] }
+      );
+
+    let actC = CorrectClazz.prototype['actC']['rpsActionConfig'];
+    expect(actC).to.deep.equals(
+      { defaultEnabled: true,
+        defaultPriority: 3,
+        defaultName: 'defActC',
+        description: 'action C desc',
+        actionName: 'actC',
+        params: 
+         [ { name: 'title', defaultPattern: '$^' },
+           { name: 'message', defaultPattern: '$^' } ] });
+
+    let actD = CorrectClazz.prototype['actD']['rpsActionConfig'];
+    expect(actD).to.deep.equals(
+      { defaultEnabled: true,
+        defaultPriority: 4,
+        defaultName: 'actD',
+        description: 'action D desc',
+        actionName: 'actD',
+        params: 
+         [ { name: 'title', defaultPattern: '$^' },
+           { name: 'message', defaultPattern: '$^' } ] });
+
+    let actE = CorrectClazz.prototype['actE']['rpsActionConfig'];
+    expect(actE).to.deep.equals(
+      { defaultEnabled: false,
+        defaultPriority: 1,
+        defaultName: 'actE',
+        description: 'action E desc',
+        params: 
+         [ { name: 'title', defaultPattern: '.*' },
+           { name: 'message', defaultPattern: '$^' } ],
+        actionName: 'actE' });
+
   });
 
 })
@@ -35,13 +79,19 @@ class WrongClazz {
 @RpsModule("Correct")
 class CorrectClazz {
 
-  @rpsAction({
-    defaultName:'call',
-    defaultParamPatterns:{
-    title:/.*/
-  }})
-  calling (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{
-    
-    return Promise.resolve(true);
-  }
+  @rpsAction()
+  actA (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
+
+  @rpsAction({defaultName:'defActB'})
+  actB (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
+
+  @rpsAction({defaultName:'defActC',description:'action C desc'})
+  actC (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
+
+  @rpsAction({defaultName:'actD',description:'action D desc',defaultPriority:4})
+  actD (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
+
+  @rpsAction({defaultName:'actE',description:'action E desc',
+  defaultEnabled:false,defaultPriority:1,params:[{name:'title',defaultPattern:/.*/}] })
+  actE (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
 }

@@ -1,5 +1,6 @@
 import {RpsContext} from './context';
 import {RpsModule,rpsAction,rpsActionSkipErrHandling} from './decorators';
-import {RpsModuleInt,ActionConfig,ActionDefaultParamPattern} from './interface';
+import {RpsModuleModel,RpsModuleActionsModel,RpsActionModel,RpsActionParamModel,RpsDefaultModel} from './interface';
 
-export {RpsContext , RpsModuleInt, RpsModule, ActionConfig, ActionDefaultParamPattern,rpsAction,rpsActionSkipErrHandling};
+export {RpsContext,RpsModule,rpsAction,rpsActionSkipErrHandling,RpsDefaultModel,
+    RpsModuleModel,RpsModuleActionsModel,RpsActionModel,RpsActionParamModel};

@@ -1,6 +1,6 @@
 import R from 'ramda';
 import { RpsContext } from './context';
-import {RpsModuleInt,ActionConfig,ActionDefaultParamPattern} from './interface';
+import {RpsModuleModel,RpsModuleActionsModel,RpsActionModel,RpsActionParamModel} from './interface';
 
 var getParamNames = require('get-parameter-names');
 
@@ -14,74 +14,89 @@ export function RpsModule (modName:string) : Function {
 }
 
 
-export function rpsAction (config?:ActionConfig) : Function{
+export function rpsAction (config?:RpsActionModel) : Function{
     return function(target: Object, key: string, descriptor: TypedPropertyDescriptor<Function>) {
         
         const originalMethod = descriptor.value;
-        let rpsModule = <RpsModuleInt>target;
-        config.actionName = originalMethod.name;
-
+        let rpsModule = <RpsModuleModel>target;
+        
         descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
             try{
-                ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'start', args);
+                ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'start', args);
             
                 const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
 
-                ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'end', result);
+                ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'end', result);
                 
                 return result;
                 
             }catch(err){
-                ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'error', err);
+                ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'error', err);
                 return err;
             }
         }
         
-        let paramNames:string[] = getParamNames(originalMethod).slice(2);
-        let defObj = config.defaultParamPatterns || {};
-        let l:Object = new Object;
+        let updatedConfig = updateConfig(originalMethod,config);
 
-        config.defaultParamPatterns = <ActionDefaultParamPattern>R.reduce((result,p)=>{
-            defObj[p] ?  result[p] = defObj[p].source : result[p] = /$^/.source;
-            return result;
-        }, l, paramNames);
-
-        Object.defineProperty(descriptor.value,'rpsActionConfig',{value:config});
+        Object.defineProperty(descriptor.value,'rpsActionConfig',{value:updatedConfig});
 
         return descriptor;
     }
 
 }
 
-export function rpsActionSkipErrHandling (config?:ActionConfig) : Function{
+
+export function rpsActionSkipErrHandling (config?:RpsActionModel) : Function{
     return function(target: Object, key: string, descriptor: TypedPropertyDescriptor<Function>) {
         
         const originalMethod = descriptor.value;
-        let rpsModule = <RpsModuleInt>target;
-        config.actionName = originalMethod.name;
+        let rpsModule = <RpsModuleModel>target;
 
         descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
-            ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'start', args);
+            ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'start', args);
         
             const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
 
-            ctx.event.emit(ACTION_EVT_NAME, rpsModule.moduleName, key, 'end', result);
+            ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'end', result);
             
             return result;
         }
         
-        let paramNames:string[] = getParamNames(originalMethod).slice(2);
-        let defObj = config.defaultParamPatterns || {};
-        let l:Object = new Object;
+        let updatedConfig = updateConfig(originalMethod,config);
 
-        config.defaultParamPatterns = <ActionDefaultParamPattern>R.reduce((result,p)=>{
-            defObj[p] ?  result[p] = defObj[p].source : result[p] = /$^/.source;
-            return result;
-        }, l, paramNames);
-
-        Object.defineProperty(descriptor.value,'rpsActionConfig',{value:config});
+        Object.defineProperty(descriptor.value,'rpsActionConfig',{value:updatedConfig});
 
         return descriptor;
     }
 
+}
+
+function updateConfig (originalMethod:Function,config:RpsActionModel) : RpsActionModel{
+    config = config || {};
+    if(config.defaultName && config.defaultEnabled == undefined) config.defaultEnabled = true;
+    
+    config = R.merge({defaultEnabled:false,defaultPriority:3} , config);
+    
+    let params:RpsActionParamModel[] = config.params || [];
+
+    //extract param name, skip options and $CONTEXT
+    let paramNames:string[] = getParamNames(originalMethod).slice(2);
+
+    //actionName is method name
+    config.actionName = originalMethod.name;
+
+    //update all params url pattern
+    params = R.map( pName => {
+        let p:RpsActionParamModel = R.find(R.propEq('name', pName))(params);
+        if (!p) p = {name:pName};
+
+        if(!p.defaultPattern) p.defaultPattern = /$^/.source;
+        else if(p.defaultPattern instanceof RegExp) p.defaultPattern  = p.defaultPattern.source;
+
+        return p;
+    }, paramNames);
+
+    config.params = params;
+
+    return config;
 }
