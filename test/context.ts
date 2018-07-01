@@ -12,4 +12,10 @@ m.describe('Context', () => {
     expect(context.variables).to.be.instanceof(Object);
   });
 
+  m.it('should update priority', function () {
+    let context = new RpsContext();
+
+    console.log(context.getRuntimeDefault());
+  });
+
 })

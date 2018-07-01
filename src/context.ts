@@ -1,6 +1,14 @@
 import { EventEmitter } from 'events';
+import ConfigStore from 'configstore';
+import {RpsDefaultModel,RpsActionModel} from './interface';
+import R from 'ramda';
 
 export class RpsContext {
+
+  readonly _runtimeconfig:string = 'rpscript-runtime';
+  readonly _config:string = 'rpscript';
+
+  configStore:ConfigStore;
 
   private _result:any;
 
@@ -15,5 +23,28 @@ export class RpsContext {
     this.event = new EventEmitter();
     this.variables = {};
     this.$RESULT = "";
+
+    this.configStore = new ConfigStore(this._runtimeconfig);
+    this.configStore.clear();
+
+    this.configStore.set(new ConfigStore(this._config).all);
   }
+
+  getRuntimeDefault() : RpsDefaultModel {
+    return this.configStore.get('$DEFAULT');
+  }
+  saveRuntimeDefault(rpsDefault:RpsDefaultModel) : void {
+    this.configStore.set('$DEFAULT',rpsDefault);
+  }
+
+  updatePriority(modName:string, keyword:string, level:number) : void {
+    let defaultModel:RpsDefaultModel = this.getRuntimeDefault();
+    let actions:RpsActionModel[] = defaultModel[keyword];
+    
+    let action:RpsActionModel = R.find(R.propEq('modName',modName) , actions);
+    action.defaultPriority = level;
+
+    this.saveRuntimeDefault(defaultModel);
+  }
+
 }

@@ -1,6 +1,6 @@
 {
   "name": "rpscript-interface",
-  "version": "0.4.0",
+  "version": "0.3.0",
   "description": "RPScript interface for module implementation",
   "keywords": [
     "api",
@@ -22,11 +22,13 @@
     "publish": "tsc && npm publish"
   },
   "dependencies": {
+    "configstore": "^3.1.2",
     "get-parameter-names": "^0.3.0",
     "ramda": "^0.25.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
+    "@types/configstore": "^2.1.1",
     "@types/node": "^10.3.5",
     "@types/ramda": "^0.25.32",
     "chai": "^4.1.2",
