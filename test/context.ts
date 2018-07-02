@@ -2,6 +2,7 @@ import {expect} from 'chai';
 import m from 'mocha';
 import {RpsContext} from '../src/context';
 import { EventEmitter } from 'events';
+import ConfigStore from 'configstore';
 
 m.describe('Context', () => {
 
@@ -12,10 +13,16 @@ m.describe('Context', () => {
     expect(context.variables).to.be.instanceof(Object);
   });
 
-  m.it('should update priority', function () {
+  m.it('runtime config should be same as original config', function () {
     let context = new RpsContext();
 
-    console.log(context.getRuntimeDefault());
+    let rtStore = context.getRuntimeDefault();
+    let rpsStore = new ConfigStore('rpscript').get('$DEFAULT');
+
+    expect(rtStore).to.be.deep.equals(rpsStore);
+
+    // context.updatePriority('notifier','notifier',5);
+    // console.log(context.getRuntimeDefault());
   });
 
 })

@@ -18,20 +18,20 @@ export function rpsAction (config?:RpsActionModel) : Function{
     return function(target: Object, key: string, descriptor: TypedPropertyDescriptor<Function>) {
         
         const originalMethod = descriptor.value;
-        let rpsModule = <RpsModuleModel>target;
         
         descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
+            let modName = this.constructor['rpsModuleName'];
             try{
-                ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'start', args);
+                ctx.event.emit(ACTION_EVT_NAME, modName, key, 'start', args);
             
                 const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
 
-                ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'end', result);
+                ctx.event.emit(ACTION_EVT_NAME, modName, key, 'end', result);
                 
                 return result;
                 
             }catch(err){
-                ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'error', err);
+                ctx.event.emit(ACTION_EVT_NAME, modName, key, 'error', err);
                 return err;
             }
         }
@@ -50,14 +50,15 @@ export function rpsActionSkipErrHandling (config?:RpsActionModel) : Function{
     return function(target: Object, key: string, descriptor: TypedPropertyDescriptor<Function>) {
         
         const originalMethod = descriptor.value;
-        let rpsModule = <RpsModuleModel>target;
 
         descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
-            ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'start', args);
+            let modName = this.constructor['rpsModuleName'];
+
+            ctx.event.emit(ACTION_EVT_NAME, modName, key, 'start', args);
         
             const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
 
-            ctx.event.emit(ACTION_EVT_NAME, rpsModule.name, key, 'end', result);
+            ctx.event.emit(ACTION_EVT_NAME, modName, key, 'end', result);
             
             return result;
         }

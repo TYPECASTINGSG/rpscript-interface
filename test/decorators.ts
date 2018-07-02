@@ -69,6 +69,24 @@ m.describe('Decorators', () => {
 
   });
 
+  m.it('should call a correct clazz function', async function () {
+    let corClazz =  new CorrectClazz;
+    let ctx = new RpsContext
+
+    ctx.event.on('action', (...p) => {
+      expect(p[0]).to.be.equals('Correct');
+      expect(p[1]).to.be.equals('actA');
+      
+      if(p[2]==='start'){
+        expect(p[3]).to.be.deep.equals([ 'title', 'message' ]);
+      }else {
+        expect(p[3]).to.be.equals(true);
+      }
+    });
+
+    corClazz.actA(ctx,{},'title','message');
+
+  });
 })
 
 
