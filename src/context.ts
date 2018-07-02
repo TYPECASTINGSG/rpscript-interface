@@ -45,6 +45,8 @@ export class RpsContext {
     action.priority = level;
 
     this.saveRuntimeDefault(defaultModel);
+
+    this.event.emit('context.priority.set',moduleName,keyword,level);
   }
 
 }
