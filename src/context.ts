@@ -37,11 +37,11 @@ export class RpsContext {
     this.configStore.set('$DEFAULT',rpsDefault);
   }
 
-  updatePriority(modName:string, keyword:string, level:number) : void {
+  updatePriority(moduleName:string, keyword:string, level:number) : void {
     let defaultModel:RpsDefaultModel = this.getRuntimeDefault();
     let actions:RpsActionModel[] = defaultModel[keyword];
     
-    let action:RpsActionModel = R.find(R.propEq('modName',modName) , actions);
+    let action:RpsActionModel = R.find(R.propEq('moduleName',moduleName) , actions);
     action.priority = level;
 
     this.saveRuntimeDefault(defaultModel);

@@ -6,9 +6,9 @@ var getParamNames = require('get-parameter-names');
 
 const ACTION_EVT_NAME = "action";
 
-export function RpsModule (modName:string) : Function {
+export function RpsModule (moduleName:string) : Function {
     return function<T extends {new(...args:any[]):{}}>(constructor:T) {
-        Object.defineProperty(constructor,'rpsModuleName',{value:modName});
+        Object.defineProperty(constructor,'rpsModuleName',{value:moduleName});
         return constructor;
     }
 }
@@ -20,18 +20,18 @@ export function rpsAction (config?:RpsActionModel) : Function{
         const originalMethod = descriptor.value;
         
         descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
-            let modName = this.constructor['rpsModuleName'];
+            let moduleName = this.constructor['rpsModuleName'];
             try{
-                ctx.event.emit(ACTION_EVT_NAME, modName, key, 'start', args);
+                ctx.event.emit(ACTION_EVT_NAME, moduleName, key, 'start', args);
             
                 const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
 
-                ctx.event.emit(ACTION_EVT_NAME, modName, key, 'end', result);
+                ctx.event.emit(ACTION_EVT_NAME, moduleName, key, 'end', result);
                 
                 return result;
                 
             }catch(err){
-                ctx.event.emit(ACTION_EVT_NAME, modName, key, 'error', err);
+                ctx.event.emit(ACTION_EVT_NAME, moduleName, key, 'error', err);
                 return err;
             }
         }
@@ -52,13 +52,13 @@ export function rpsActionSkipErrHandling (config?:RpsActionModel) : Function{
         const originalMethod = descriptor.value;
 
         descriptor.value = async function(ctx:RpsContext, opts:Object,  ... args: any[]) {
-            let modName = this.constructor['rpsModuleName'];
+            let moduleName = this.constructor['rpsModuleName'];
 
-            ctx.event.emit(ACTION_EVT_NAME, modName, key, 'start', args);
+            ctx.event.emit(ACTION_EVT_NAME, moduleName, key, 'start', args);
         
             const result = await originalMethod.apply(target, R.concat([ctx,opts] , args));
 
-            ctx.event.emit(ACTION_EVT_NAME, modName, key, 'end', result);
+            ctx.event.emit(ACTION_EVT_NAME, moduleName, key, 'end', result);
             
             return result;
         }

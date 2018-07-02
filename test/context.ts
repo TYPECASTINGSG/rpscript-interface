@@ -20,9 +20,93 @@ m.describe('Context', () => {
     let rpsStore = new ConfigStore('rpscript').get('$DEFAULT');
 
     expect(rtStore).to.be.deep.equals(rpsStore);
+  });
 
-    // context.updatePriority('notifier','notifier',5);
-    // console.log(context.getRuntimeDefault());
+  m.it('should select top priority action', function () {
+    let ctx:RpsContext = new RpsContext;
+    ctx.configStore = new ConfigStore('rps-test-rpscontext');
+    ctx.configStore.set(UPDATED_CONFIG_OVERLAP);
+
+    expect(ctx.configStore.all).to.be.deep.equals(UPDATED_CONFIG_OVERLAP);
+
+    ctx.updatePriority('fakeTestOverlap','fakeAction1',5);
+
+    expect(ctx.configStore.all).to.be.deep.equals(PRIORITY_SET_CONFIG_OVERLAP);
   });
 
 })
+
+
+let UPDATED_CONFIG_OVERLAP = {
+  "$DEFAULT": {
+    "fakeAction1": [
+      {
+        "enabled": true,
+        "priority": 3,
+        "verbName": "fakeAction1",
+        "methodName": "fakeAction1",
+        "params": [
+          {
+            "name": "first",
+            "pattern": "$^"
+          }
+        ],
+        "moduleName": "fakeTest"
+      },
+      {
+        "enabled": true,
+        "priority": 1,
+        "verbName": "fakeAction1",
+        "methodName": "fakeAction1",
+        "params": [
+          {
+            "name": "first",
+            "pattern": "$^"
+          },
+          {
+            "name": "second",
+            "pattern": "$^"
+          }
+        ],
+        "moduleName": "fakeTestOverlap"
+      }
+    ],
+  }
+}
+
+let PRIORITY_SET_CONFIG_OVERLAP = {
+  "$DEFAULT": {
+    "fakeAction1": [
+      {
+        "enabled": true,
+        "priority": 3,
+        "verbName": "fakeAction1",
+        "methodName": "fakeAction1",
+        "params": [
+          {
+            "name": "first",
+            "pattern": "$^"
+          }
+        ],
+        "moduleName": "fakeTest"
+      },
+      {
+        "enabled": true,
+        "priority": 5,
+        "verbName": "fakeAction1",
+        "methodName": "fakeAction1",
+        "params": [
+          {
+            "name": "first",
+            "pattern": "$^"
+          },
+          {
+            "name": "second",
+            "pattern": "$^"
+          }
+        ],
+        "moduleName": "fakeTestOverlap"
+      }
+    ],
+  }
+}
