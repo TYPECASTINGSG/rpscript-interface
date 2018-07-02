@@ -74,25 +74,24 @@ export function rpsActionSkipErrHandling (config?:RpsActionModel) : Function{
 
 function updateConfig (originalMethod:Function,config:RpsActionModel) : RpsActionModel{
     config = config || {};
-    if(config.defaultName && config.defaultEnabled == undefined) config.defaultEnabled = true;
+    if(config.verbName && config.enabled == undefined) config.enabled = true;
     
-    config = R.merge({defaultEnabled:false,defaultPriority:3} , config);
+    config = R.merge({enabled:false,priority:3} , config);
     
     let params:RpsActionParamModel[] = config.params || [];
 
     //extract param name, skip options and $CONTEXT
     let paramNames:string[] = getParamNames(originalMethod).slice(2);
 
-    //actionName is method name
-    config.actionName = originalMethod.name;
+    config.methodName = originalMethod.name;
 
     //update all params url pattern
     params = R.map( pName => {
         let p:RpsActionParamModel = R.find(R.propEq('name', pName))(params);
         if (!p) p = {name:pName};
 
-        if(!p.defaultPattern) p.defaultPattern = /$^/.source;
-        else if(p.defaultPattern instanceof RegExp) p.defaultPattern  = p.defaultPattern.source;
+        if(!p.pattern) p.pattern = /$^/.source;
+        else if(p.pattern instanceof RegExp) p.pattern  = p.pattern.source;
 
         return p;
     }, paramNames);

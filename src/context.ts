@@ -42,7 +42,7 @@ export class RpsContext {
     let actions:RpsActionModel[] = defaultModel[keyword];
     
     let action:RpsActionModel = R.find(R.propEq('modName',modName) , actions);
-    action.defaultPriority = level;
+    action.priority = level;
 
     this.saveRuntimeDefault(defaultModel);
   }

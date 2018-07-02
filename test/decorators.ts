@@ -16,56 +16,56 @@ m.describe('Decorators', () => {
 
     let actA = CorrectClazz.prototype['actA']['rpsActionConfig'];
     expect(actA).to.deep.equals(
-      { defaultEnabled: false,
-        defaultPriority: 3,
-        actionName: 'actA',
+      { enabled: false,
+        priority: 3,
+        methodName: 'actA',
         params: 
-         [ { name: 'title', defaultPattern: '$^' },
-           { name: 'message', defaultPattern: '$^' } ] });
+         [ { name: 'title', pattern: '$^' },
+           { name: 'message', pattern: '$^' } ] });
 
     let actB = CorrectClazz.prototype['actB']['rpsActionConfig'];
     expect(actB).to.deep.equals(
-      { defaultEnabled: true,
-        defaultPriority: 3,
-        defaultName: 'defActB',
-        actionName: 'actB',
+      { enabled: true,
+        priority: 3,
+        verbName: 'defActB',
+        methodName: 'actB',
         params: 
-         [ { name: 'title', defaultPattern: '$^' },
-           { name: 'message', defaultPattern: '$^' } ] }
+         [ { name: 'title', pattern: '$^' },
+           { name: 'message', pattern: '$^' } ] }
       );
 
     let actC = CorrectClazz.prototype['actC']['rpsActionConfig'];
     expect(actC).to.deep.equals(
-      { defaultEnabled: true,
-        defaultPriority: 3,
-        defaultName: 'defActC',
+      { enabled: true,
+        priority: 3,
+        verbName: 'defActC',
         description: 'action C desc',
-        actionName: 'actC',
+        methodName: 'actC',
         params: 
-         [ { name: 'title', defaultPattern: '$^' },
-           { name: 'message', defaultPattern: '$^' } ] });
+         [ { name: 'title', pattern: '$^' },
+           { name: 'message', pattern: '$^' } ] });
 
     let actD = CorrectClazz.prototype['actD']['rpsActionConfig'];
     expect(actD).to.deep.equals(
-      { defaultEnabled: true,
-        defaultPriority: 4,
-        defaultName: 'actD',
+      { enabled: true,
+        priority: 4,
+        verbName: 'actD',
         description: 'action D desc',
-        actionName: 'actD',
+        methodName: 'actD',
         params: 
-         [ { name: 'title', defaultPattern: '$^' },
-           { name: 'message', defaultPattern: '$^' } ] });
+         [ { name: 'title', pattern: '$^' },
+           { name: 'message', pattern: '$^' } ] });
 
     let actE = CorrectClazz.prototype['actE']['rpsActionConfig'];
     expect(actE).to.deep.equals(
-      { defaultEnabled: false,
-        defaultPriority: 1,
-        defaultName: 'actE',
+      { enabled: false,
+        priority: 1,
+        verbName: 'actE',
         description: 'action E desc',
         params: 
-         [ { name: 'title', defaultPattern: '.*' },
-           { name: 'message', defaultPattern: '$^' } ],
-        actionName: 'actE' });
+         [ { name: 'title', pattern: '.*' },
+           { name: 'message', pattern: '$^' } ],
+        methodName: 'actE' });
 
   });
 
@@ -100,16 +100,16 @@ class CorrectClazz {
   @rpsAction()
   actA (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
 
-  @rpsAction({defaultName:'defActB'})
+  @rpsAction({verbName:'defActB'})
   actB (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
 
-  @rpsAction({defaultName:'defActC',description:'action C desc'})
+  @rpsAction({verbName:'defActC',description:'action C desc'})
   actC (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
 
-  @rpsAction({defaultName:'actD',description:'action D desc',defaultPriority:4})
+  @rpsAction({verbName:'actD',description:'action D desc',priority:4})
   actD (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
 
-  @rpsAction({defaultName:'actE',description:'action E desc',
-  defaultEnabled:false,defaultPriority:1,params:[{name:'title',defaultPattern:/.*/}] })
+  @rpsAction({verbName:'actE',description:'action E desc',
+  enabled:false,priority:1,params:[{name:'title',pattern:/.*/}] })
   actE (ctx:RpsContext,opts:{}, title:string, message?:string) : Promise<boolean>{return Promise.resolve(true);}
 }
