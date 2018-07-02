@@ -1,6 +1,6 @@
 {
   "name": "rpscript-interface",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "RPScript interface for module implementation",
   "keywords": [
     "api",
