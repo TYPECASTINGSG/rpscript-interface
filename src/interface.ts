@@ -7,6 +7,8 @@ export interface RpsModuleModel {
     npmVersion:string;
     enabled:boolean;
     actions?: RpsModuleActionsModel;
+    description?:string;
+    tags?:string[];
 }
 export interface RpsModuleActionsModel { [verbName:string]:RpsActionModel; }
 
@@ -19,6 +21,7 @@ export interface RpsActionModel {
     params?:RpsActionParamModel[];
 
     description?:string;
+    tags?:string[];
 }
 
 export interface RpsActionParamModel {
