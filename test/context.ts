@@ -34,6 +34,20 @@ m.describe('Context', () => {
     expect(ctx.configStore.all).to.be.deep.equals(PRIORITY_SET_CONFIG_OVERLAP);
   });
 
+  m.it('should add module context', function () {
+    let ctx:RpsContext = new RpsContext;
+    
+    ctx.addModuleContext('test1',{});
+    ctx.addModuleContext('test2',{item:'item'});
+
+    let test1 = ctx.getModuleContext('test1');
+    let test2 = ctx.getModuleContext('test2');
+
+    expect(test1).to.be.deep.equals({});
+    expect(test2).to.be.deep.equals({item:'item'});
+
+  });
+
 })
 
 

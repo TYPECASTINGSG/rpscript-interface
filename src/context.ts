@@ -9,7 +9,7 @@ export class RpsContext {
   readonly _config:string = 'rpscript';
 
   configStore:ConfigStore;
-
+  private _moduleContext:Object;
   private _result:any;
 
   get $RESULT():any{ return this._result; }
@@ -23,11 +23,19 @@ export class RpsContext {
     this.event = new EventEmitter();
     this.variables = {};
     this.$RESULT = "";
+    this._moduleContext = Object;
 
     this.configStore = new ConfigStore(this._runtimeconfig);
     this.configStore.clear();
 
     this.configStore.set(new ConfigStore(this._config).all);
+  }
+
+  addModuleContext (modName:string,context:any) : void{
+    this._moduleContext[modName] = context;
+  }
+  getModuleContext (modName:string) : any{
+    return this._moduleContext[modName];
   }
 
   getRuntimeDefault() : RpsDefaultModel {
