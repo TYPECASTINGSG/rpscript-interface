@@ -8,7 +8,7 @@ export class RpsContext {
   readonly _runtimeconfig:string = 'rpscript-runtime';
   readonly _config:string = 'rpscript';
 
-  readonly LOAD_MOD_ERR_EVT:string = 'action.module.load.error';
+  static readonly LOAD_MOD_ERR_EVT:string = 'action.module.load.error';
 
   configStore:ConfigStore;
   private _moduleContext:Object;
