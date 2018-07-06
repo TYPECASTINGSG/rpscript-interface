@@ -40,6 +40,18 @@ export class RpsContext {
     return this._moduleContext[modName];
   }
 
+  getModuleContextStartWith(startingName:string) : any[] {
+    let list = [];
+    
+    R.keys(this._moduleContext).forEach( key => {
+
+      if(key.startsWith(startingName)) list.push( this._moduleContext[key] );
+      
+    });
+
+    return list;
+  }
+
   getRuntimeDefault() : RpsDefaultModel {
     return this.configStore.get('$DEFAULT');
   }

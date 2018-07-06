@@ -46,6 +46,14 @@ m.describe('Context', () => {
     expect(test1).to.be.deep.equals({});
     expect(test2).to.be.deep.equals({item:'item'});
 
+    let testList = ctx.getModuleContextStartWith('test');
+
+    expect(testList).to.be.deep.equals([test1,test2]);
+
+    let emptyList = ctx.getModuleContextStartWith('abc');
+
+    expect(emptyList).to.be.deep.equals([]);
+
   });
 
 })
