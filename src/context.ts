@@ -40,6 +40,9 @@ export class RpsContext {
     return this._moduleContext[modName];
   }
 
+  getAllContexts () :any[]{
+    return R.values(this._moduleContext);
+  }
   getModuleContextStartWith(startingName:string) : any[] {
     let list = [];
     
