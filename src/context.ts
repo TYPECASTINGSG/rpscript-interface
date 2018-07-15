@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events';
 import ConfigStore from 'configstore';
 import {RpsDefaultModel,RpsActionModel} from './interface';
-import R from 'ramda';
+import * as R from 'ramda';
 
 export class RpsContext {
 

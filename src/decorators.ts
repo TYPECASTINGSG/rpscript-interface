@@ -1,4 +1,4 @@
-import R from 'ramda';
+import * as R from 'ramda';
 import { RpsContext } from './context';
 import {RpsModuleModel,RpsModuleActionsModel,RpsActionModel,RpsActionParamModel} from './interface';
 

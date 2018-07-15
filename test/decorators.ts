@@ -1,9 +1,8 @@
 import {expect} from 'chai';
 import m from 'mocha';
-import { RpsModule,rpsAction } from '../src/decorators';
-import { RpsContext } from '../src/context';
-
-let $CONTEXT;
+// import { RpsModule,rpsAction } from '../build/decorators';
+// import { RpsContext } from '../build/context';
+import rpsIndex , { RpsModule,rpsAction,RpsContext } from '../build/index';
 
 
 m.describe('Decorators', () => {

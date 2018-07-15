@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import m from 'mocha';
-import {RpsContext} from '../src/context';
+import {RpsContext} from '../build/index';
 import { EventEmitter } from 'events';
 import ConfigStore from 'configstore';
 

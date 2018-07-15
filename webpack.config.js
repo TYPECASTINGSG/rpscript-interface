@@ -2,6 +2,7 @@ var path = require('path');
 
 module.exports = {
   entry: './src/index.ts',
+  devtool: 'nosources-source-map',
   module: {
     rules: [
       {
@@ -17,6 +18,8 @@ module.exports = {
   target: 'node',
   output: {
     path: path.join(__dirname, '.'),
-    filename: 'build/index.js'
+    filename: 'build/index.js',
+    library:'',
+    libraryTarget:'commonjs'
   }
 }
