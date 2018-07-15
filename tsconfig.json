@@ -10,6 +10,7 @@
      "es2017","es2015","dom","es6"
     ],
     "outDir": "build/",
+    "sourceMap": true,
     "types":["node"],
     "target": "es2015",
     "module": "commonjs",

@@ -17,15 +17,10 @@
   },
   "scripts": {
     "watch": "tsc -w",
-    "build": "tsc",
-    "test": "mocha -r ts-node/register test/**.ts",
-    "publish": "tsc && npm publish"
+    "build": "rm -rf build/ && webpack",
+    "test": "mocha -r ts-node/register test/**.ts"
   },
-  "dependencies": {
-    "configstore": "^3.1.2",
-    "get-parameter-names": "^0.3.0",
-    "ramda": "^0.25.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/configstore": "^2.1.1",
@@ -33,7 +28,13 @@
     "@types/ramda": "^0.25.32",
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
+    "ramda": "^0.25.0",
+    "configstore": "^3.1.2",
+    "get-parameter-names": "^0.3.0",
+    "ts-loader": "^4.4.2",
     "ts-node": "^6.0.5",
-    "typescript": "^2.8.3"
+    "typescript": "^2.8.3",
+    "webpack": "^4.16.0",
+    "webpack-cli": "^3.0.8"
   }
 }
