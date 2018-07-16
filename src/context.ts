@@ -10,7 +10,7 @@ export class RpsContext {
 
   static readonly LOAD_MOD_ERR_EVT:string = 'action.module.load.error';
 
-  configStore:ConfigStore;
+  configStore:any;
   private _moduleContext:Object;
   private _result:any;
 
